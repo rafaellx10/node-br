@@ -4,29 +4,66 @@
     2 - obter o endereco do usuário pele id
 */
 
-function obterUsuario() {
+function obterUsuario(callback) {
 	setTimeout(function() {
-		return {
+		return callback(null, {
 			id: 1,
 			nome: "Aladin",
-			dataNascimento: new Data()
-		};
+			dataNascimento: new Date()
+		});
 	}, 1000);
 }
 
-function obterTelefone(idUsuario) {
+function obterTelefone(idUsuario, callback) {
 	setTimeout(() => {
-		return {
+		return callback(null, {
 			telefone: "9 4029-2332",
 			ddd: 11
-		};
+		});
 	}, 2000);
 }
 
-function obterEndereco(idUsuario) {}
+function obterEndereco(idUsuario, callback) {
+	setTimeout(() => {
+		return callback(null, {
+			rua: "dos bobos",
+			numero: 0
+		});
+	}, 2000);
+}
 
-const usuario = obterUsuario();
+function resolverUsuario(err, usuario) {
+	console.log("usuario ", usuario);
+}
+
+obterUsuario(function resolverUsuario(err1, usuario) {
+	// null || "" || 0 === false
+	if (err1) {
+		console.error("Erro em usuário ", err1);
+		return;
+	}
+	obterTelefone(usuario.id, function resolverTelefone(err2, telefone) {
+		if (err2) {
+			console.error("Erro em telefone ", err2);
+			return;
+		}
+		obterEndereco(usuario.id, function resolverEndereco(err3, endereco) {
+			if (err3) {
+				console.error("Erro em endereco ", err3);
+				return;
+			}
+
+			console.log(`
+				Nome: ${usuario.nome},
+				endereco: ${endereco.rua},${endereco.numero},
+				Telefone: (${telefone.ddd}) ${telefone.telefone}
+			`);
+		});
+	});
+});
+
+// const usuario = obterUsuario();
 // const telefone = obterTelefone(usuario.telefone);
 
-console.log("usuário ", usuario);
+// console.log("usuário ", usuario);
 // console.log("telefone ", telefone);
