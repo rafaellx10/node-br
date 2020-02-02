@@ -66,10 +66,20 @@ usuarioPromise
 	})
 	.then(function(result) {
 		const endereco = obterEnderecoAsync(result.usuario.id);
-		// return endereco;
+		return endereco.then(function resolverEndereco(resultado) {
+			return {
+				usuario: result.usuario,
+				telefone: result.telefone,
+				endereco: resultado
+			};
+		});
 	})
 	.then(function(result) {
-		console.log("resultado: ", result);
+		// console.log("resultado: ", result);
+		console.log(`
+			Nome: ${result.usuario.nome}
+			Endereco: ${result.endereco.rua}, ${result.endereco.numero}
+			Telefone: (${result.telefone.ddd}) ${result.telefone.telefone}`);
 	})
 	.catch(function(err) {
 		console.error("Deu ruim ", err);
