@@ -52,8 +52,14 @@ async function main() {
 	try {
 		console.time("medida-promise");
 		const usuario = await obterUsuario();
-		const telefone = await obterTelefone(usuario.id);
-		const endereco = await obterEnderecoAsync(usuario.id);
+		// const telefone = await obterTelefone(usuario.id);
+		// const endereco = await obterEnderecoAsync(usuario.id);
+		const resultado = await Promise.all([
+			obterTelefone(usuario.id),
+			obterEnderecoAsync(usuario.id)
+		]);
+		const endereco = resultado[1];
+		const telefone = resultado[0];
 
 		console.log(`
 			Nome: ${usuario.nome}
