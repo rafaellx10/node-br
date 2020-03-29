@@ -1,2 +1,9 @@
-node "file" // run
+$node "file" // run
 
+$ npm init -y
+
+$ npm install -g mocha
+
+$ npm i --save-dev mocha
+
+$ mocha  // to run mocha
