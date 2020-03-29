@@ -13,3 +13,5 @@ $ mocha  // to run mocha
 $ mocha --help
 
 $ mocha --reporter=nyan
+
+it.only('test', () => {})
