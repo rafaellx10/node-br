@@ -15,3 +15,9 @@ $ mocha --help
 $ mocha --reporter=nyan
 
 it.only('test', () => {})
+
+npm install commander
+
+$ node index.js -c -n Flash -p Speed
+$ node index.js -c -n Aquaman -p Marinho
+$ node index.js -r --id 1585504942945
