@@ -1,8 +1,9 @@
-const { readFile } = require("fs");
+const { readFile, writeFile } = require("fs");
 
 const { promisify } = require("util");
 
 const readFileAsync = promisify(readFile);
+const writeFileAsync = promisify(writeFile);
 
 // outra forma de obter dados do json
 // const dadosJson = require("./herois.json")
@@ -16,7 +17,40 @@ class Database {
 		return JSON.parse(arquivo.toString());
 	}
 
-	escreverArquivo() {}
+	async escreverArquivo(dados) {
+		await writeFileAsync(this.NOME_ARQUIVO, JSON.stringify(dados));
+		return true;
+	}
+
+	async cadastrar(heroi) {
+		const dados = await this.obterDadosArquivo();
+		const id = heroi.id <= 2 ? heroi.id : Date.now();
+		/**
+		 * {
+		 *  nome: Flash
+		 *  poder: speed
+		 * }
+		 *
+		 * {
+		 *  id: 13432432
+		 * }
+		 *
+		 * {
+		 *  nome: Flash,
+		 *  poder: speed,
+		 *  id: 13432432
+		 * }
+		 */
+		const heroiComId = {
+			id,
+			...heroi
+		};
+
+		const dadosFinal = [...dados, heroiComId];
+
+		const resultado = await this.escreverArquivo(dadosFinal);
+		return resultado;
+	}
 
 	async listar(id) {
 		const dados = await this.obterDadosArquivo();

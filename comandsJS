@@ -9,3 +9,7 @@ $ npm i --save-dev mocha
 $ mocha  // to run mocha
 
 & npm install nock
+
+$ mocha --help
+
+$ mocha --reporter=nyan
