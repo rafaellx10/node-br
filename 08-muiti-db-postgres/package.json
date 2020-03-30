@@ -1,0 +1,12 @@
+{
+  "name": "07-muiti-db",
+  "version": "1.0.0",
+  "description": "sudo docker run \\ \t--name postgres \\ \t-e POSTGRES_USER=rafael \\ \t-e POSTGRES_PASSWORD=admin \\ \t-e POSTGRES_DB=heroes \\ \t-p 5432:5432 \\ \t-d \\ \tpostgres",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
