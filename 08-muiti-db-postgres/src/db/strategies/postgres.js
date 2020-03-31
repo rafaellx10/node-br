@@ -1,5 +1,5 @@
 const ICrud = require("./intefaces/interfaceCrud");
-const Sequelize = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 class Postgres extends ICrud {
 	constructor() {
@@ -20,9 +20,9 @@ class Postgres extends ICrud {
 	}
 
 	create(item) {
-		console.log("O item foi salvo no Postgres");
+		return this._herois.create(item);
 	}
-	async difineModel() {
+	async defineModel() {
 		this._herois = this._driver.define(
 			"herois",
 			{
@@ -47,7 +47,7 @@ class Postgres extends ICrud {
 				timestamps: false
 			}
 		);
-		await Herois.sync();
+		await this._herois.sync();
 	}
 
 	_connect() {
@@ -56,6 +56,7 @@ class Postgres extends ICrud {
 			dialect: "postgres",
 			quoteIndentifiers: false
 		});
+		this.defineModel();
 	}
 }
 
