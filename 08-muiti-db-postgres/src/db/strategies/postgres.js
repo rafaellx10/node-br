@@ -20,8 +20,13 @@ class Postgres extends ICrud {
 	}
 
 	create(item) {
-		return this._herois.create(item);
+		return this._herois.create(item, { raw: true });
 	}
+
+	async read(item = {}) {
+		return this._herois.findAll({ where: item, raw: true });
+	}
+
 	async defineModel() {
 		this._herois = this._driver.define(
 			"herois",
