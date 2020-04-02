@@ -27,6 +27,13 @@ class Postgres extends ICrud {
 		return this._herois.findAll({ where: item, raw: true });
 	}
 
+	async update(id, item) {
+		return await this._herois.update(item, { where: { id: id } });
+		// const result = await this._herois.update(item, { where: { id: id } });
+		// console.log("update:", result);
+		// return result;
+	}
+
 	async defineModel() {
 		this._herois = this._driver.define(
 			"herois",
