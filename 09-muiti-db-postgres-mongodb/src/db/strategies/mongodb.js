@@ -5,7 +5,7 @@ const STATUS = {
 	0: "Disconectado",
 	1: "Conectado",
 	2: "Conectando",
-	3: "Disconectando"
+	3: "Disconectando",
 };
 
 class MongoDB extends ICrud {
@@ -20,7 +20,7 @@ class MongoDB extends ICrud {
 		if (state === "Conectado") return state;
 		if (state !== "Conectando") return state;
 
-		await new Promise(resolve => setTimeout(resolve, 1000));
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 		return STATUS[this._driver.readyState];
 	}
 
@@ -28,16 +28,16 @@ class MongoDB extends ICrud {
 		const heroiSchema = new mongoose.Schema({
 			nome: {
 				type: String,
-				required: true
+				required: true,
 			},
 			poder: {
 				type: String,
-				required: true
+				required: true,
 			},
 			insertedAt: {
 				type: Date,
-				default: new Date()
-			}
+				default: new Date(),
+			},
 		});
 		this._herois = mongoose.model("herois", heroiSchema);
 	}
@@ -46,7 +46,7 @@ class MongoDB extends ICrud {
 		mongoose.connect(
 			"mongodb://rafaelleal:minhasenhasecreta@localhost:27017/herois",
 			{ useNewUrlParser: true },
-			function(error) {
+			function (error) {
 				if (!error) return;
 				console.log("Falha na coneção!", error);
 			}
@@ -62,10 +62,11 @@ class MongoDB extends ICrud {
 	}
 
 	read(item, skip = 0, limit = 10) {
-		return this._herois
-			.find(item)
-			.skip(skip)
-			.limit(limit);
+		return this._herois.find(item).skip(skip).limit(limit);
+	}
+
+	update(id, item) {
+		return this._herois.updateOne({ _id: id }, { $set: item });
 	}
 }
 
