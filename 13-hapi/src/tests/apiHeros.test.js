@@ -36,7 +36,17 @@ describe("Suite de Testes da API Heroes", function () {
 			url: `/herois?skip=0&limit=${TAMANHO_LIMITE}`,
 		});
 		const statusCode = result.statusCode;
-		assert.deepEqual(result.payload, "Erro interno no servidor");
+		const errorResult = {
+			statusCode: 400,
+			error: "Bad Request",
+			message: 'child "limit" fails because ["limit" must be a number]',
+			validation: {
+				source: "query",
+				keys: ["limit"],
+			},
+		};
+		assert.deepEqual(result.statusCode, 400);
+		assert.deepEqual(result.payload, JSON.stringify(errorResult));
 	});
 	it("Listar /herois - deve filtrar um item", async () => {
 		const TAMANHO_LIMITE = 1000;
