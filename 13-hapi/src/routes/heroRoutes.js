@@ -1,6 +1,8 @@
 const BaseRoute = require("./base/baseRouter");
 const joi = require("joi");
-
+const failAction = (request, headers, erro) => {
+	throw erro;
+};
 class HeroRoutes extends BaseRoute {
 	constructor(db) {
 		super();
@@ -17,9 +19,7 @@ class HeroRoutes extends BaseRoute {
 					// headers => cabeçalho da requisição
 					// params => na URL :id
 					// query => ?skip=0&limit=10
-					failAction: (request, headers, erro) => {
-						throw erro;
-					},
+					failAction,
 					query: joi.object({
 						skip: joi.number().integer().default(0),
 						limit: joi.number().integer().default(10),
@@ -35,6 +35,36 @@ class HeroRoutes extends BaseRoute {
 				} catch (err) {
 					console.log("Deu Ruim ", err);
 					return "Erro interno no servidor";
+				}
+			},
+		};
+	}
+
+	create() {
+		return {
+			path: "/herois",
+			method: "POST",
+			config: {
+				validate: {
+					failAction,
+					payload: {
+						nome: joi.string().required().min(3).max(40),
+						poder: joi.string().required().min(2).max(40),
+					},
+				},
+			},
+			handler: async (request) => {
+				try {
+					const { nome, poder } = request.payload;
+					const result = await this.db.create({ nome, poder });
+					console.log("Result ", result);
+					return {
+						message: "Heroi cadastrado com sucesso!",
+						_id: result._id,
+					};
+				} catch (err) {
+					console.log("Deu ruim ", err);
+					return "Internal Error!";
 				}
 			},
 		};
