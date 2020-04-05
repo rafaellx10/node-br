@@ -1,5 +1,6 @@
 const BaseRoute = require("./base/baseRouter");
 const joi = require("joi");
+const boom = require("boom");
 const failAction = (request, headers, erro) => {
 	throw erro;
 };
@@ -30,11 +31,12 @@ class HeroRoutes extends BaseRoute {
 			handler: (request, headers) => {
 				try {
 					const { skip, limit, nome } = request.query;
+					// throw Error("Deu ruim");
 					const query = nome ? { nome: { $regex: `.*${nome}*.` } } : {};
 					return this.db.read(query, skip, limit);
 				} catch (err) {
 					console.log("Deu Ruim ", err);
-					return "Erro interno no servidor";
+					return boom.internal();
 				}
 			},
 		};
@@ -64,7 +66,7 @@ class HeroRoutes extends BaseRoute {
 					};
 				} catch (err) {
 					console.log("Deu ruim ", err);
-					return "Internal Error!";
+					return boom.internal();
 				}
 			},
 		};
@@ -97,14 +99,16 @@ class HeroRoutes extends BaseRoute {
 
 					const result = await this.db.update(id, dados);
 					console.log("result", result);
+					// if (result.nModified !== 1)
+					// 	return { message: "Não foi possível atualizar!" };
 					if (result.nModified !== 1)
-						return { message: "Não foi possível atualizar!" };
+						return boom.preconditionFailed("Id não encontrado no banco!");
 					return {
 						message: "Heroi atualizado com sucesso!",
 					};
 				} catch (err) {
 					console.error("Deu ruim ", err);
-					return `Internal Error!`;
+					return boom.internal();
 				}
 			},
 		};
@@ -127,13 +131,16 @@ class HeroRoutes extends BaseRoute {
 					const { id } = request.params;
 					const result = await this.db.delete(id);
 					console.log("result", result);
+					// if (result.deletedCount !== 1) {
+					// 	return { message: "Não foi possível remover o item!" };
+					// }
 					if (result.deletedCount !== 1) {
-						return { message: "Não foi possível remover o item!" };
+						return boom.preconditionFailed("Id não encontrado no banco!");
 					}
 					return { message: "Heroi removido com sucesso!" };
 				} catch (err) {
 					console.error("Deu Ruim ", err);
-					return "Internal Error!";
+					return boom.internal();
 				}
 			},
 		};
