@@ -10,7 +10,7 @@ const MOCK_HEROI_INICIAL = {
 	poder: "Flexas",
 };
 let MOCK_ID = "";
-describe.only("Suite de Testes da API Heroes", function () {
+describe("Suite de Testes da API Heroes", function () {
 	this.beforeAll(async () => {
 		app = await api;
 		const result = await app.inject({
@@ -120,5 +120,17 @@ describe.only("Suite de Testes da API Heroes", function () {
 		console.log(dados.message);
 		assert.ok(statusCode === 200);
 		assert.deepEqual(dados.message, "Não foi possível atualizar!");
+	});
+	it("Remover DELETE - /herois/:id", async () => {
+		const _id = MOCK_ID;
+		const result = await app.inject({
+			method: "DELETE",
+			url: `/herois/${_id}`,
+		});
+		const statusCode = result.statusCode;
+		const dados = JSON.parse(result.payload);
+
+		assert.ok(statusCode === 200);
+		assert.deepEqual(dados.message, "Heroi removido com sucesso!");
 	});
 });
