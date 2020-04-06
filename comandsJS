@@ -26,3 +26,6 @@ $ node index.js -r --id 1585504942945
 $sudo docker ps
 
 rm -rf node_modules
+
+npm i hapi
+npm i vision inert hapi-swagger

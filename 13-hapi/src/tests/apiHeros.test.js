@@ -66,7 +66,8 @@ describe("Suite de Testes da API Heroes", function () {
 	});
 	it("Listar /herois - deve filtrar um item", async () => {
 		const TAMANHO_LIMITE = 1000;
-		const NAME = "Batman";
+		// const NAME =  MOCK_HEROI_CADASTRAR.nome;
+		const NAME = "Chapolin Colorado";
 		const result = await app.inject({
 			method: "GET",
 			url: `/herois?skip=0&limit=${TAMANHO_LIMITE}&nome=${NAME}`,
