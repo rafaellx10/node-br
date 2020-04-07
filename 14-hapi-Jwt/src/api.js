@@ -10,6 +10,9 @@ const inert = require("inert");
 const JWT_SECRET = "MEU_SEGREDAO_123";
 const hapiJwt = require("hapi-auth-jwt2");
 
+const usuarioSchema = require("./db/strategies/postgres/schemas/usuarioSchema");
+const Postgres = require("./db/strategies/postgres/postgres");
+
 const app = new hapi.Server({
 	port: 5000,
 });
@@ -25,6 +28,11 @@ function mapRoutes(instace, methods) {
 async function main() {
 	const connection = MongoDb.connect();
 	const context = new Context(new MongoDb(connection, HeroisSchema));
+
+	const connectionPostgres = await Postgres.connect();
+	const model = await Postgres.defineModel(connectionPostgres, usuarioSchema);
+	const contextPostgres = new Context(new Postgres(connectionPostgres, model));
+
 	const swaggerOptions = {
 		info: {
 			title: "API Herois - #CursoNodeBR",
@@ -49,9 +57,14 @@ async function main() {
 		// options: {
 		// 	expiresIn: 20
 		// },
-		validate: (dado, request) => {
+		validate: async (dado, request) => {
 			// verifica no banco se usuario continua ativo
 			// verifica no banco se usuario continua pangando
+			const [result] = await contextPostgres.read({
+				username: dado.username.toLowerCase(),
+				id: dado.id,
+			});
+			if (!result) return { isValid: false };
 
 			return {
 				isValid: true,
@@ -61,7 +74,10 @@ async function main() {
 	app.auth.default("jwt");
 	app.route([
 		...mapRoutes(new HeroRoutes(context), HeroRoutes.methods()),
-		...mapRoutes(new AuthRoutes(JWT_SECRET), AuthRoutes.methods()),
+		...mapRoutes(
+			new AuthRoutes(JWT_SECRET, contextPostgres),
+			AuthRoutes.methods()
+		),
 	]);
 	await app.start();
 	console.log("Servidor rodando na porta ", app.info.port);
