@@ -34,3 +34,7 @@ npm i jsonwebtoken
 npm i hapi-auth-jwt2
 
 npm i bcrypt
+
+npm i dotenv
+sudo npm i -g cross-env
+cross-env NODE_ENV=prod npm t
