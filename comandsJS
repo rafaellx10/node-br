@@ -29,3 +29,6 @@ rm -rf node_modules
 
 npm i hapi
 npm i vision inert hapi-swagger
+
+npm i jsonwebtoken
+npm i hapi-auth-jwt2
