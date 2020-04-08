@@ -39,3 +39,5 @@ npm i dotenv
 sudo npm i -g cross-env
 cross-env NODE_ENV=prod npm t
 npm run test:prod
+
+heroku apps:list

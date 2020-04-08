@@ -1,0 +1,30 @@
+npm i -g heroku
+
+criar um script => "prod": "cross-env NODE_ENV=prod src/api.js"
+
+$ rm -rf node_modules
+
+$ npm i cross-env
+
+$ heroku apps:list
+
+$ heroku apps:create cursonodebr-rafael
+
+$ git init
+
+$ heroku apps:remote --app cursonodebr-rafael
+
+criar o arquivo Procfil, e dentro dele deve está escrito => web: npm run prod]
+criar .gitignore e colocar o node_modules
+
+add o postgres no heroku => settings => View credentials... => copia a uri => cola no .env.prod
+
+$ git add .
+
+$	git commit -m "v1.0"
+
+$ git push heroku master
+
+$ git add . && git commit -m "v1.0" && git push heroku master
+
+& heroku logs

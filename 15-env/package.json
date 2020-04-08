@@ -1,12 +1,13 @@
 {
-	"name": "10-muiti-db-refactoring-mongodb",
+	"name": "15-env",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha src/tests/*.js",
+		"test": "mocha --timeout 10000 src/tests/*.js",
 		"test:watch": "mocha src/tests/*.js -w",
-		"test:prod": "cross-env NODE_ENV=prod npm t"
+		"test:prod": "cross-env NODE_ENV=prod npm t",
+		"prod": "cross-env NODE_ENV=prod node src/api.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -14,6 +15,7 @@
 	"dependencies": {
 		"bcrypt": "^4.0.1",
 		"boom": "^7.3.0",
+		"cross-env": "^7.0.2",
 		"dotenv": "^8.2.0",
 		"hapi": "^18.1.0",
 		"hapi-auth-jwt2": "^10.0.0",
