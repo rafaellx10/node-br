@@ -16,6 +16,7 @@ const Context = require("./db/strategies/base/contextStrategy");
 const HeroisSchema = require("./db/strategies/mongodb/schemas/heroisSchemas");
 const HeroRoutes = require("./routes/heroRoutes");
 const AuthRoutes = require("./routes/authRoutes");
+const UtilRoutes = require("./routes/utilRoutes")
 const hapiSwagger = require("hapi-swagger");
 const vision = require("vision");
 const inert = require("inert");
@@ -90,6 +91,7 @@ async function main() {
 			new AuthRoutes(JWT_SECRET, contextPostgres),
 			AuthRoutes.methods()
 		),
+		...mapRoutes(new UtilRoutes(), UtilRoutes.methods()),
 	]);
 	await app.start();
 	console.log("Servidor rodando na porta ", app.info.port);
